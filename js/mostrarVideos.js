@@ -1,21 +1,28 @@
-import { conexionAPI } from "./conexionAPI.js";
-const lista = document.querySelector("[data-lista]")
+import { conectaAPI } from "./conectaAPI.js";
 
-function crearCard(){
+const lista = document.querySelector("[data-lista]");
+
+function construyeCard(titulo,descripcion,url,imagen){
     const video = document.createElement("li");
     video.className="videos__item";
-    video.innerHTML=`<iframe width="100%" height="72%" src="https://www.youtube.com/embed/QjOWz9avkg8"
-                title="Front-end vs. Back-end: ¡Descubre el lado perfecto para ti!" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
-                <div class="descripcion-video">
-                <img src="./img/logo.png" alt="logo canal alura">
-                <h3>Front-end vs. Back-end: ¡Descubre el lado perfecto para ti!</h3>
-                <p>236 mil visualizaciones</p>
-                </div>`;
+    
+    video.innerHTML=`<iframe width="100%" height="72%" src="${url}"
+    title="${titulo}" frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; geolocation"
+    allowfullscreen></iframe>
+<div class="descripcion-video">
+    <img src="${imagen}" alt="logo canal alura">
+    <h3>${titulo}</h3>
+    <p>${descripcion}</p>
+</div>`
+
     return video;
 }
-async function listarVideos() {
-    const listAPI= conexionAPI.listarVideos()
-    
+
+
+async function listaVideos(){
+    const listaAPI = await conectaAPI.listaVideos();
+    listaAPI.forEach(element => lista.appendChild(construyeCard(element.titulo,element.descripcion,element.url,element.imagen)));
 }
+
+listaVideos();
